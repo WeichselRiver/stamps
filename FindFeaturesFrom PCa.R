@@ -64,4 +64,3 @@ ftp
 cx = colorLabels(x)
 display(cx, method = "raster")
 
-xx = t(imageData(x))

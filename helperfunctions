@@ -1,11 +1,18 @@
-# rotate picture using EBImage
-cat("Put 4 Points into corners\n") 
-cords = locator(n = 4, type = "l")    
-# tan(alpha)  
-w1 = (cords$y[1] - cords$y[2])/(cords$x[2] - cords$x[1])  
-w2 = (cords$x[3] - cords$x[2])/(cords$y[2] - cords$y[3])  
-w3 = (cords$y[3] - cords$y[4])/(cords$x[3] - cords$x[4])  
-w4 = (cords$x[4] - cords$x[1])/(cords$y[1] - cords$y[4])    
-w = mean(w1, w2, w3, w4)  
-img_rot = EBImage::rotate(x, atan(w)*180/pi)  
-b1 = x[min(cords$x):max(cords$x), min(cords$y):max(cords$y),]
+# Ähnlichkeitstrafo mittels vec2ddtransf
+
+library(tidyverse)
+df <- readxl::read_xlsx("Trafo.xlsx")
+library(vec2dtransf)
+st <- SimilarityTransformation(controlPoints = data.frame(df))
+calculateParameters(st)
+getParameters(st)
+
+ad.example("parrots")#Shift imagemap.shift <- function(x,y) list(x=x+10,y=y+30)imwarp(im,map=map.shift) %>% plot#Shift image (backward transform)imwarp(im,map=map.shift,dir="backward") %>% plot
+
+library(imager)
+im1 <- load.image("picturesWtmb/13_1_b.JPG")im2 <- load.image("picturesWtmb/13_2_PFI.JPG") 
+im_list <- imlist(im1, im2)im_app <- imappend(im_list, "x")grabPoint(im_app)
+df = data.frame(xs = c(), ys = c(), xt = c(), yt = c())
+im3 <- imdraw(im1, im2, opacity = 0.5)
+
+for (i in 1:4 ){  im_app <- imappend(im_list, "x")  # display(im3)  cat("Grab point in source\n")  rt <- grabPoint(im_app)  df[i, 1] <- rt[1]  df[i, 2] <- rt[2]  cat("Grab point in target\n")  rt <- grabPoint(im_app)  df[i, 3] <- rt[1] - width(im1)  df[i, 4] <- rt[2]  print(df)}

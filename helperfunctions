@@ -1,0 +1,11 @@
+# rotate picture using EBImage
+cat("Put 4 Points into corners\n") 
+cords = locator(n = 4, type = "l")    
+# tan(alpha)  
+w1 = (cords$y[1] - cords$y[2])/(cords$x[2] - cords$x[1])  
+w2 = (cords$x[3] - cords$x[2])/(cords$y[2] - cords$y[3])  
+w3 = (cords$y[3] - cords$y[4])/(cords$x[3] - cords$x[4])  
+w4 = (cords$x[4] - cords$x[1])/(cords$y[1] - cords$y[4])    
+w = mean(w1, w2, w3, w4)  
+img_rot = EBImage::rotate(x, atan(w)*180/pi)  
+b1 = x[min(cords$x):max(cords$x), min(cords$y):max(cords$y),]

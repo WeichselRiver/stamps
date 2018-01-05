@@ -16,3 +16,10 @@ df = data.frame(xs = c(), ys = c(), xt = c(), yt = c())
 im3 <- imdraw(im1, im2, opacity = 0.5)
 
 for (i in 1:4 ){  im_app <- imappend(im_list, "x")  # display(im3)  cat("Grab point in source\n")  rt <- grabPoint(im_app)  df[i, 1] <- rt[1]  df[i, 2] <- rt[2]  cat("Grab point in target\n")  rt <- grabPoint(im_app)  df[i, 3] <- rt[1] - width(im1)  df[i, 4] <- rt[2]  print(df)}
+
+# cut and rotate image
+cut_rotate <- function(im1) {  # get points from picture  df = data.frame(xs = c(), ys = c())  for (i in 1:4 ){    #im_app <- imappend(im_list, "x")        cat("Grab 4 corner points starting in upper left corner\n")    rt <- grabPoint(im1)    df[i, 1] <- rt[1]    df[i, 2] <- rt[2]    print(df)  }    # target points  df[1,3] <- 0; df[1,4] <- 0; df[2,3] <-width(im1); df[2,4] <- 0   df[3,3] <-width(im1); df[3,4] <- height(im1); df[4,3] <- 0; df[4,4] <- height(im1)    # get transformation parameters  st <- SimilarityTransformation(controlPoints = data.frame(df))  calculateParameters(st)  params  <- getParameters(st)    # warp picture  map.shift <- function(x,y) list(    x = params[1] * x + params[2] * y + params[3],    y = params[1] * y + params[2] * x + params[4]  )  im2 <- imwarp(im1,map=map.shift, dir="backward")  im2 %>% plot    # cut picture  cat("select upper left corner")  rt_ul <- grabPoint(im2)  cat("select lower right corner")  rt_lr <- grabPoint(im2)    im_cut <- imsub(im2,                   x %inr% c(rt_ul[1], rt_lr[1]),                  y %inr% c(rt_ul[2], rt_lr[2]))  return(im_cut)}
+
+
+
+

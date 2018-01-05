@@ -18,8 +18,11 @@ eval_wert <- function() {
   dta_check <- readxl::read_xlsx("ChecklList.xlsx") 
   
   
-  get_wert <- function(satz, anzahl, vollst) {
-    dta_sel <- dta %>% dplyr::filter(Set == satz) %>% arrange(Wert)
+  get_wert <- function(satz, entw, anzahl, vollst) {
+    dta_sel <- dta %>% 
+      dplyr::filter(Set == satz) %>%
+      dplyr::filter(Entwertung == entw) %>% 
+      arrange(Wert)
     
     anzMarken <- anzahl
     vollstaendigkeit = vollst
@@ -40,12 +43,16 @@ eval_wert <- function() {
   
   dta_check <- dta_check %>% 
     rowwise %>%
-    mutate(wert = get_wert(set, anzahl, vollstaendigkeit))
+    mutate(wert = get_wert(set, Entwertung, anzahl, vollstaendigkeit))
   
   print(dta_check)
   
-  print(sum(dta_check$wert)*0.10)
+  print(sum(dta_check$wert, na.rm = T))
 }
+
+
+
+eval_wert()
 
 
 

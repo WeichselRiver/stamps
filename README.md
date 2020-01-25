@@ -1,5 +1,5 @@
 # stamps
-Functions to analyze stamps and pictues of stamps
+Functions to analyze stamps and pictues of stamps using R
 
 
 ## Current projects:
